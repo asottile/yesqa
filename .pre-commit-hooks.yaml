@@ -1,0 +1,6 @@
+-   id: yesqa
+    name: Strip unnecessary `# noqa`s
+    description: Automatically remove unnecessary `# noqa` comments
+    entry: yesqa
+    language: python
+    types: [python]
