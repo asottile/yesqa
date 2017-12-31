@@ -43,14 +43,28 @@ def _remove_comments(tokens):
 
 
 def _rewrite_noqa_comment(tokens, i, flake8_results):
+    # find logical lines that this noqa comment may affect
+    lines = set()
+    j = i
+    while j >= 0 and tokens[j].name not in {'NL', 'NEWLINE'}:
+        t = tokens[j]
+        if t.line is not None:
+            lines.update(range(t.line, t.line + t.src.count('\n') + 1))
+        j -= 1
+
+    lints = set()
+    for line in lines:
+        lints.update(flake8_results[line])
+
     token = tokens[i]
     match = NOQA_RE.match(token.src)
+
     # exclude all lints on the line but no lints
-    if token.line not in flake8_results:
+    if not lints:
         _remove_comment(tokens, i)
     elif match.group().lower() != '# noqa':
         codes = set(SEP_RE.split(match.group(1)[2:]))
-        expected_codes = codes & flake8_results[token.line]
+        expected_codes = codes & lints
         if expected_codes != codes:
             comment = '# noqa: {}'.format(','.join(sorted(expected_codes)))
             tokens[i] = token._replace(src=NOQA_RE.sub(comment, token.src))
