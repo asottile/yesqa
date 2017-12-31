@@ -32,9 +32,11 @@ def test_non_utf8_bytes(tmpdir, capsys):
     (
         '',  # noop
         '# hello\n',  # comment at beginning of file
-        'import os  # noqa\n',  # still needed
-        'import os  # NOQA\n',  # still needed
-        'import os  # noqa: F401\n',  # still needed
+        # still needed
+        'import os  # noqa\n',
+        'import os  # NOQA\n',
+        'import os  # noqa: F401\n',
+        '"""\n' + 'a' * 40 + ' ' + 'b' * 60 + '\n""" # noqa\n',
     ),
 )
 def test_ok(assert_rewrite, src):
