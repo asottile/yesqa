@@ -4,7 +4,7 @@ setup(
     name='yesqa',
     description='Automatically remove unnecessary `# noqa` comments.',
     url='https://github.com/asottile/yesqa',
-    version='0.0.2',
+    version='0.0.3',
     author='Anthony Sottile',
     author_email='asottile@umich.edu',
     classifiers=[
