@@ -13,8 +13,10 @@ import tempfile
 import tokenize_rt
 
 NOQA_FILE_RE = re.compile('^# flake8[:=]\s*noqa', re.I)
-NOQA_RE = re.compile('# noqa(: ([a-z][0-9]+([,\s]+)?)+)?', re.I)
-SEP_RE = re.compile('[,\s]+')
+_code = '[a-z][0-9]+'
+_sep = '[,\s]+'
+NOQA_RE = re.compile('# noqa(: {c}({s}{c})*)?'.format(c=_code, s=_sep), re.I)
+SEP_RE = re.compile(_sep)
 
 
 def _run_flake8(filename):
