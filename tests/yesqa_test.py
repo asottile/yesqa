@@ -36,6 +36,7 @@ def test_non_utf8_bytes(tmpdir, capsys):
         'import os  # noqa\n',
         'import os  # NOQA\n',
         'import os  # noqa: F401\n',
+        'import os  # noqa: F401 isort:skip\n',
         '"""\n' + 'a' * 40 + ' ' + 'b' * 60 + '\n""" # noqa\n',
     ),
 )
