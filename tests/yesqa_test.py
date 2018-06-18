@@ -54,6 +54,16 @@ def test_ok(assert_rewrite, src):
         ('import os  # noqa: F401,X999\n', 'import os  # noqa: F401\n'),
         ('# foo # noqa\nx = 1\n', '# foo\nx = 1\n'),
         ('# noqa # foo\nx = 1\n', '# foo\nx = 1\n'),
+        (
+            'try:\n'
+            '    pass\n'
+            'except OSError:  # noqa hi\n'
+            '    pass\n',
+            'try:\n'
+            '    pass\n'
+            'except OSError:  # hi\n'
+            '    pass\n',
+        ),
         # file comments
         ('# flake8: noqa\nx = 1\n', 'x = 1\n'),
         ('x = 1  # flake8: noqa\n', 'x = 1\n'),
