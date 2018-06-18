@@ -12,9 +12,9 @@ import tempfile
 
 import tokenize_rt
 
-NOQA_FILE_RE = re.compile('^# flake8[:=]\s*noqa', re.I)
+NOQA_FILE_RE = re.compile(r'^# flake8[:=]\s*noqa', re.I)
 _code = '[a-z][0-9]+'
-_sep = '[,\s]+'
+_sep = r'[,\s]+'
 NOQA_RE = re.compile('# noqa(: {c}({s}{c})*)?'.format(c=_code, s=_sep), re.I)
 SEP_RE = re.compile(_sep)
 
