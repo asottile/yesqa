@@ -65,7 +65,10 @@ def _rewrite_noqa_comment(tokens, i, flake8_results):
     if not lints and match.group() == token.src:
         _remove_comment(tokens, i)
     elif not lints:
-        tokens[i] = token._replace(src=NOQA_RE.sub('', token.src).strip())
+        src = NOQA_RE.sub('', token.src).strip()
+        if not src.startswith('#'):
+            src = '# {}'.format(src)
+        tokens[i] = token._replace(src=src)
     elif match.group().lower() != '# noqa':
         codes = set(SEP_RE.split(match.group(1)[2:]))
         expected_codes = codes & lints
