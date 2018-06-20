@@ -39,7 +39,12 @@ def _remove_comment(tokens, i):
 def _remove_comments(tokens):
     tokens = list(tokens)
     for i, token in reversed(tuple(enumerate(tokens))):
-        if token.name == 'COMMENT':
+        if (
+                token.name == 'COMMENT' and (
+                    NOQA_RE.search(token.src) or
+                    NOQA_FILE_RE.search(token.src)
+                )
+        ):
             _remove_comment(tokens, i)
     return tokens
 
@@ -91,6 +96,10 @@ def fix_file(filename):
 
     tokens_no_comments = _remove_comments(tokens)
     src_no_comments = tokenize_rt.tokens_to_src(tokens_no_comments)
+
+    if src_no_comments == contents_text:
+        return 0
+
     with tempfile.NamedTemporaryFile(
         dir=os.path.dirname(filename),
         prefix=os.path.basename(filename),

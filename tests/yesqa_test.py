@@ -64,6 +64,14 @@ def test_ok(assert_rewrite, src):
             'except OSError:  # hi\n'
             '    pass\n',
         ),
+        (
+            'import os  # noqa\n'
+            '# hello world\n'
+            'os\n',
+            'import os\n'
+            '# hello world\n'
+            'os\n',
+        ),
         # file comments
         ('# flake8: noqa\nx = 1\n', 'x = 1\n'),
         ('x = 1  # flake8: noqa\n', 'x = 1\n'),
