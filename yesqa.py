@@ -109,6 +109,10 @@ def fix_file(filename):
         tmpfile.flush()
         flake8_results = _run_flake8(tmpfile.name)
 
+    if any('E999' in v for v in flake8_results.values()):
+        print('{}: syntax error (skipping)'.format(filename))
+        return 0
+
     for i, token in reversed(tuple(enumerate(tokens))):
         if token.name != 'COMMENT':
             continue
