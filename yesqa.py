@@ -38,7 +38,7 @@ def _remove_comment(tokens, i):
 
 def _remove_comments(tokens):
     tokens = list(tokens)
-    for i, token in reversed(tuple(enumerate(tokens))):
+    for i, token in tokenize_rt.reversed_enumerate(tokens):
         if (
                 token.name == 'COMMENT' and (
                     NOQA_RE.search(token.src) or
@@ -113,7 +113,7 @@ def fix_file(filename):
         print('{}: syntax error (skipping)'.format(filename))
         return 0
 
-    for i, token in reversed(tuple(enumerate(tokens))):
+    for i, token in tokenize_rt.reversed_enumerate(tokens):
         if token.name != 'COMMENT':
             continue
 
