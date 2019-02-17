@@ -36,6 +36,7 @@ def test_non_utf8_bytes(tmpdir, capsys):
         'import os  # noqa\n',
         'import os  # NOQA\n',
         'import os  # noqa: F401\n',
+        'import os  # noqa:F401\n',
         'import os  # noqa: F401 isort:skip\n',
         'import os  # isort:skip # noqa\n',
         'import os  # isort:skip # noqa: F401\n',
@@ -54,6 +55,7 @@ def test_ok(assert_rewrite, src):
         # line comments
         ('x = 1  # noqa\n', 'x = 1\n'),
         ('import os  # noqa: F401,X999\n', 'import os  # noqa: F401\n'),
+        ('import os  # noqa:F401,X999\n', 'import os  # noqa: F401\n'),
         ('# foo # noqa\nx = 1\n', '# foo\nx = 1\n'),
         ('# noqa # foo\nx = 1\n', '# foo\nx = 1\n'),
         (

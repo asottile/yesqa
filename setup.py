@@ -17,7 +17,7 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
-    install_requires=['flake8', 'tokenize-rt>=2.1'],
+    install_requires=['flake8>=3.7', 'tokenize-rt>=2.1'],
     py_modules=['yesqa'],
     entry_points={'console_scripts': ['yesqa = yesqa:main']},
 )
