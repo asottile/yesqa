@@ -43,6 +43,11 @@ def test_non_utf8_bytes(tmpdir, capsys):
         '"""\n' + 'a' * 40 + ' ' + 'b' * 60 + '\n""" # noqa\n',
         # don't rewrite syntax errors
         'import x  # noqa\nx() = 5\n',
+
+        'A' * 65 + ' = int\n\n\n'
+        'def f():\n'
+        '    # type: () -> ' + 'A' * 65 + '  # noqa\n'
+        '    pass\n',
     ),
 )
 def test_ok(assert_rewrite, src):
@@ -75,6 +80,10 @@ def test_ok(assert_rewrite, src):
             'import os\n'
             '# hello world\n'
             'os\n',
+        ),
+        (
+            '# a  # noqa: E501\n',
+            '# a\n',
         ),
         # file comments
         ('# flake8: noqa\nx = 1\n', 'x = 1\n'),

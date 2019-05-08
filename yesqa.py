@@ -39,13 +39,11 @@ def _remove_comment(tokens, i):
 def _remove_comments(tokens):
     tokens = list(tokens)
     for i, token in tokenize_rt.reversed_enumerate(tokens):
-        if (
-                token.name == 'COMMENT' and (
-                    NOQA_RE.search(token.src) or
-                    NOQA_FILE_RE.search(token.src)
-                )
-        ):
-            _remove_comment(tokens, i)
+        if token.name == 'COMMENT':
+            if NOQA_RE.search(token.src):
+                _rewrite_noqa_comment(tokens, i, collections.defaultdict(set))
+            elif NOQA_FILE_RE.search(token.src):
+                _remove_comment(tokens, i)
     return tokens
 
 
