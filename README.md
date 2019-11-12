@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/asottile/yesqa.svg?branch=master)](https://travis-ci.org/asottile/yesqa)
-[![Coverage Status](https://coveralls.io/repos/github/asottile/yesqa/badge.svg?branch=master)](https://coveralls.io/github/asottile/yesqa?branch=master)
+[![Build Status](https://dev.azure.com/asottile/asottile/_apis/build/status/asottile.yesqa?branchName=master)](https://dev.azure.com/asottile/asottile/_build/latest?definitionId=53&branchName=master)
+[![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/asottile/asottile/53/master.svg)](https://dev.azure.com/asottile/asottile/_build/latest?definitionId=53&branchName=master)
 
 yesqa
 =====
