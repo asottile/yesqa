@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 import pytest
 
 import yesqa
@@ -24,7 +20,7 @@ def test_non_utf8_bytes(tmpdir, capsys):
     f.write_binary('x = "€"'.encode('cp1252'))
     assert yesqa.fix_file(str(f)) == 1
     out, _ = capsys.readouterr()
-    assert out == '{} is non-utf8 (not supported)\n'.format(f)
+    assert out == f'{f} is non-utf8 (not supported)\n'
 
 
 @pytest.mark.parametrize(
@@ -102,4 +98,4 @@ def test_main(tmpdir, capsys):
     assert ret == 1
     assert g.read() == 'x = 1\n'
     out, _ = capsys.readouterr()
-    assert out == 'Rewriting {}\n'.format(g)
+    assert out == f'Rewriting {g}\n'
