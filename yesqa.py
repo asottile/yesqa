@@ -1,5 +1,6 @@
 import argparse
 import collections
+import difflib
 import os.path
 import re
 import subprocess
@@ -88,7 +89,7 @@ def _rewrite_noqa_comment(
             tokens[i] = token._replace(src=NOQA_RE.sub(comment, token.src))
 
 
-def fix_file(filename: str) -> int:
+def fix_file(filename: str, show_diff: bool, dry_run: bool) -> int:
     with open(filename, 'rb') as f:
         contents_bytes = f.read()
 
@@ -133,9 +134,18 @@ def fix_file(filename: str) -> int:
 
     newsrc = tokenize_rt.tokens_to_src(tokens)
     if newsrc != contents_text:
-        print(f'Rewriting {filename}')
-        with open(filename, 'wb') as f:
-            f.write(newsrc.encode())
+        if (show_diff or dry_run):
+            diff = difflib.unified_diff(
+                contents_text.splitlines(keepends=True),
+                newsrc.splitlines(keepends=True),
+                fromfile=filename,
+                tofile=filename,
+            )
+            print(''.join(diff), end='')
+        if (not dry_run):
+            print(f'Rewriting {filename}')
+            with open(filename, 'wb') as f:
+                f.write(newsrc.encode())
         return 1
     else:
         return 0
@@ -144,11 +154,23 @@ def fix_file(filename: str) -> int:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*')
+    parser.add_argument(
+        '--diff',
+        default=False,
+        action='store_true',
+        help='Show file diffs'
+    )
+    parser.add_argument(
+        '--dry-run',
+        default=False,
+        action='store_true',
+        help="Don't make changes to files, enables '--diff'"
+    )
     args = parser.parse_args(argv)
 
     retv = 0
     for filename in args.filenames:
-        retv |= fix_file(filename)
+        retv |= fix_file(filename, args.diff, args.dry_run)
     return retv
 
 
