@@ -81,6 +81,13 @@ def test_ok(assert_rewrite, src):
             '# a  # noqa: E501\n',
             '# a\n',
         ),
+        pytest.param(
+            'if x==1:  # noqa: F401\n'
+            '    pass\n',
+            'if x==1:\n'
+            '    pass\n',
+            id='wrong noqa',
+        ),
         # file comments
         ('# flake8: noqa\nx = 1\n', 'x = 1\n'),
         ('x = 1  # flake8: noqa\n', 'x = 1\n'),

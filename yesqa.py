@@ -72,18 +72,25 @@ def _rewrite_noqa_comment(
     match = NOQA_RE.search(token.src)
     assert match is not None
 
+    def _remove_noqa() -> None:
+        assert match is not None
+        if match.group() == token.src:
+            _remove_comment(tokens, i)
+        else:
+            src = NOQA_RE.sub('', token.src).strip()
+            if not src.startswith('#'):
+                src = f'# {src}'
+            tokens[i] = token._replace(src=src)
+
     # exclude all lints on the line but no lints
-    if not lints and match.group() == token.src:
-        _remove_comment(tokens, i)
-    elif not lints:
-        src = NOQA_RE.sub('', token.src).strip()
-        if not src.startswith('#'):
-            src = f'# {src}'
-        tokens[i] = token._replace(src=src)
+    if not lints:
+        _remove_noqa()
     elif match.group().lower() != '# noqa':
         codes = set(SEP_RE.split(match.group(1)[1:]))
         expected_codes = codes & lints
-        if expected_codes != codes:
+        if not expected_codes:
+            _remove_noqa()
+        elif expected_codes != codes:
             comment = f'# noqa: {", ".join(sorted(expected_codes))}'
             tokens[i] = token._replace(src=NOQA_RE.sub(comment, token.src))
 
