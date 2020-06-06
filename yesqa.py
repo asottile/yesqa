@@ -89,7 +89,7 @@ def _rewrite_noqa_comment(
             tokens[i] = token._replace(src=NOQA_RE.sub(comment, token.src))
 
 
-def fix_file(filename: str, show_diff: bool, dry_run: bool) -> int:
+def fix_file(filename: str, show_diff: bool = False, dry_run: bool = False) -> int:
     with open(filename, 'rb') as f:
         contents_bytes = f.read()
 
@@ -158,13 +158,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         '--diff',
         default=False,
         action='store_true',
-        help='Show file diffs'
+        help='Show file diffs',
     )
     parser.add_argument(
         '--dry-run',
         default=False,
         action='store_true',
-        help="Don't make changes to files, enables '--diff'"
+        help="Don't make changes to files, enables '--diff'",
     )
     args = parser.parse_args(argv)
 
