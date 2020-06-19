@@ -107,3 +107,13 @@ def test_main(tmpdir, capsys):
     assert g.read() == 'x = 1\n'
     out, _ = capsys.readouterr()
     assert out == f'Rewriting {g}\n'
+
+
+def test_show_source_in_config(tmpdir, capsys):
+    f = tmpdir.join('f.py')
+    f.write('import os  # noqa\n')
+    tmpdir.join('tox.ini').write('[flake8]\nshow_source = true\n')
+    with tmpdir.as_cwd():
+        ret = yesqa.main((str(f),))
+    assert ret == 0
+    assert f.read() == 'import os  # noqa\n'
