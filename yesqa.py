@@ -27,8 +27,13 @@ def _run_flake8(filename: str) -> Dict[int, Set[str]]:
     out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
     ret: Dict[int, Set[str]] = collections.defaultdict(set)
     for line in out.decode().splitlines():
-        lineno, code = line.split('\t')
-        ret[int(lineno)].add(code)
+        # TODO: use --no-show-source when that is released instead
+        try:
+            lineno, code = line.split('\t')
+        except ValueError:
+            pass  # ignore additional output besides our --format
+        else:
+            ret[int(lineno)].add(code)
     return ret
 
 
