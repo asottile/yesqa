@@ -118,14 +118,17 @@ def fix_file(filename: str) -> int:
     if src_no_comments == contents_text:
         return 0
 
-    with tempfile.NamedTemporaryFile(
+    fd, path = tempfile.mkstemp(
         dir=os.path.dirname(filename),
         prefix=os.path.basename(filename),
         suffix='.py',
-    ) as tmpfile:
-        tmpfile.write(src_no_comments.encode())
-        tmpfile.flush()
-        flake8_results = _run_flake8(tmpfile.name)
+    )
+    try:
+        with open(fd, 'wb') as f:
+            f.write(src_no_comments.encode())
+        flake8_results = _run_flake8(path)
+    finally:
+        os.remove(path)
 
     if any('E999' in v for v in flake8_results.values()):
         print(f'{filename}: syntax error (skipping)')
