@@ -23,7 +23,7 @@ Sample `.pre-commit-config.yaml`:
 
 ```yaml
 -   repo: https://github.com/asottile/yesqa
-    rev: v1.2.2
+    rev: v1.2.3
     hooks:
     -   id: yesqa
 ```
