@@ -7,6 +7,7 @@ import sys
 import tempfile
 from typing import Dict
 from typing import List
+from typing import Match
 from typing import Optional
 from typing import Sequence
 from typing import Set
@@ -49,10 +50,22 @@ def _remove_comments(tokens: Tokens) -> Tokens:
     for i, token in tokenize_rt.reversed_enumerate(tokens):
         if token.name == 'COMMENT':
             if NOQA_RE.search(token.src):
-                _rewrite_noqa_comment(tokens, i, collections.defaultdict(set))
+                _mask_noqa_comment(tokens, i)
             elif NOQA_FILE_RE.search(token.src):
                 _remove_comment(tokens, i)
     return tokens
+
+
+def _mask_noqa_comment(tokens: Tokens, i: int) -> None:
+    token = tokens[i]
+    match = NOQA_RE.search(token.src)
+    assert match is not None
+
+    def _sub(match: Match[str]) -> str:
+        return f'# {"."*(len(match.group())-2)}'
+
+    src = NOQA_RE.sub(_sub, token.src)
+    tokens[i] = token._replace(src=src)
 
 
 def _rewrite_noqa_comment(

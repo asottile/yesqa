@@ -45,6 +45,8 @@ def test_non_utf8_bytes(tmpdir, capsys):
         'def f():\n'
         '    # type: () -> ' + 'A' * 65 + '  # noqa\n'
         '    pass\n',
+        'def foo(w: Sequence[int], x: Sequence[int], y: int, z: int) -> bar: ...  # noqa: E501, F821\n',
+        'def foo(w: Sequence[int]) -> bar:  # foobarfoobarfoobarfoobarfoobarfoo   # noqa: E501, F821\n',
     ),
 )
 def test_ok(assert_rewrite, src):
