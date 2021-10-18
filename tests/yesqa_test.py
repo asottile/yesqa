@@ -91,6 +91,11 @@ def test_ok(assert_rewrite, src):
             '    pass\n',
             id='wrong noqa',
         ),
+        pytest.param(
+            'x = 1  # foo # noqa: ABC123\n',
+            'x = 1  # foo\n',
+            id='multi-character noqa code',
+        ),
         # file comments
         ('# flake8: noqa\nx = 1\n', 'x = 1\n'),
         ('x = 1  # flake8: noqa\n', 'x = 1\n'),

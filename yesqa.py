@@ -17,7 +17,7 @@ import tokenize_rt
 Tokens = List[tokenize_rt.Token]
 
 NOQA_FILE_RE = re.compile(r'^# flake8[:=]\s*noqa', re.I)
-_code = '[a-z][0-9]+'
+_code = '[a-z]{1,3}[0-9]+'
 _sep = r'[,\s]+'
 NOQA_RE = re.compile(f'# noqa(: ?{_code}({_sep}{_code})*)?', re.I)
 SEP_RE = re.compile(_sep)
