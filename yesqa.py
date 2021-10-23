@@ -78,7 +78,7 @@ def _rewrite_noqa_comment(
     j = i
     while j >= 0 and tokens[j].name not in {'NL', 'NEWLINE'}:
         t = tokens[j]
-        if t.line is not None:
+        if t.line is not None:  # pragma: no branch (tokenize-rt<4.2.1)
             lines.update(range(t.line, t.line + t.src.count('\n') + 1))
         j -= 1
 
