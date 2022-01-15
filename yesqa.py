@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import collections
 import os.path
@@ -5,12 +7,9 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import Dict
 from typing import List
 from typing import Match
-from typing import Optional
 from typing import Sequence
-from typing import Set
 
 import tokenize_rt
 
@@ -23,10 +22,10 @@ NOQA_RE = re.compile(f'# noqa(: ?{_code}({_sep}{_code})*)?', re.I)
 SEP_RE = re.compile(_sep)
 
 
-def _run_flake8(filename: str) -> Dict[int, Set[str]]:
+def _run_flake8(filename: str) -> dict[int, set[str]]:
     cmd = (sys.executable, '-mflake8', '--format=%(row)d\t%(code)s', filename)
     out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
-    ret: Dict[int, Set[str]] = collections.defaultdict(set)
+    ret: dict[int, set[str]] = collections.defaultdict(set)
     for line in out.decode().splitlines():
         # TODO: use --no-show-source when that is released instead
         try:
@@ -71,10 +70,10 @@ def _mask_noqa_comment(tokens: Tokens, i: int) -> None:
 def _rewrite_noqa_comment(
         tokens: Tokens,
         i: int,
-        flake8_results: Dict[int, Set[str]],
+        flake8_results: dict[int, set[str]],
 ) -> None:
     # find logical lines that this noqa comment may affect
-    lines: Set[int] = set()
+    lines: set[int] = set()
     j = i
     while j >= 0 and tokens[j].name not in {'NL', 'NEWLINE'}:
         t = tokens[j]
@@ -169,7 +168,7 @@ def fix_file(filename: str) -> int:
         return 0
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*')
     args = parser.parse_args(argv)
