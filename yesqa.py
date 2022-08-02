@@ -23,17 +23,18 @@ SEP_RE = re.compile(_sep)
 
 
 def _run_flake8(filename: str) -> dict[int, set[str]]:
-    cmd = (sys.executable, '-mflake8', '--format=%(row)d\t%(code)s', filename)
+    cmd = (
+        sys.executable,
+        '-mflake8',
+        '--format=%(row)d\t%(code)s',
+        '--no-show-source',
+        filename,
+    )
     out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
     ret: dict[int, set[str]] = collections.defaultdict(set)
     for line in out.decode().splitlines():
-        # TODO: use --no-show-source when that is released instead
-        try:
-            lineno, code = line.split('\t')
-        except ValueError:
-            pass  # ignore additional output besides our --format
-        else:
-            ret[int(lineno)].add(code)
+        lineno, code = line.split('\t')
+        ret[int(lineno)].add(code)
     return ret
 
 
