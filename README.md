@@ -12,7 +12,9 @@ or other code in the file caused it to no longer need a `# noqa` (such as an unu
 
 ## Installation
 
-`pip install yesqa`
+```bash
+pip install yesqa
+```
 
 
 ## As a pre-commit hook
