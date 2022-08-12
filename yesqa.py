@@ -32,8 +32,7 @@ def _run_flake8(filename: str) -> dict[int, set[str]]:
     cmd = (*CMD, filename)
     output = subprocess.run(
         cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     if output.returncode and not output.stdout:
         raise RuntimeError('flake8 failed to run')
