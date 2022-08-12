@@ -20,19 +20,25 @@ _code = '[a-z]{1,3}[0-9]+'
 _sep = r'[,\s]+'
 NOQA_RE = re.compile(f'# noqa(: ?{_code}({_sep}{_code})*)?', re.I)
 SEP_RE = re.compile(_sep)
+CMD = (
+    sys.executable,
+    '-mflake8',
+    '--format=%(row)d\t%(code)s',
+    '--no-show-source',
+)
 
 
 def _run_flake8(filename: str) -> dict[int, set[str]]:
-    cmd = (
-        sys.executable,
-        '-mflake8',
-        '--format=%(row)d\t%(code)s',
-        '--no-show-source',
-        filename,
+    cmd = (*CMD, filename)
+    output = subprocess.run(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
-    out, _ = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()
+    if output.returncode and not output.stdout:
+        raise RuntimeError('flake8 failed to run')
     ret: dict[int, set[str]] = collections.defaultdict(set)
-    for line in out.decode().splitlines():
+    for line in output.stdout.decode().splitlines():
         lineno, code = line.split('\t')
         ret[int(lineno)].add(code)
     return ret
@@ -140,6 +146,9 @@ def fix_file(filename: str) -> int:
         with open(fd, 'wb') as f:
             f.write(src_no_comments.encode())
         flake8_results = _run_flake8(path)
+    except RuntimeError:
+        print(f'{filename}: error while running flake8 (skipping)')
+        return 0
     finally:
         os.remove(path)
 

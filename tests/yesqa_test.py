@@ -126,3 +126,14 @@ def test_show_source_in_config(tmpdir, capsys):
         ret = yesqa.main((str(f),))
     assert ret == 0
     assert f.read() == 'import os  # noqa\n'
+
+
+def test_flake8_fails_to_run(assert_rewrite, monkeypatch):
+    cmd = (
+        'python',
+        '-c',
+        'import sys; sys.exit(1)',
+    )
+    monkeypatch.setattr('yesqa.CMD', cmd)
+    src = 'foo  # noqa: E501'
+    assert_rewrite(src)
