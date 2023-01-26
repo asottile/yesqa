@@ -5,7 +5,7 @@ yesqa
 =====
 
 A tool (and pre-commit hook) to automatically remove unnecessary `# noqa`
-comments, for example: a check that's no longer applicable (say you increased your
+comments. For example: a check that's no longer applicable (say you increased your
 max line length), a mistake (`# noqa` added to a line that wasn't failing),
 or other code in the file caused it to no longer need a `# noqa` (such as an unused import).
 
@@ -18,7 +18,8 @@ pip install yesqa
 
 ## As a pre-commit hook
 
-See [pre-commit](https://github.com/pre-commit/pre-commit) for instructions
+See [pre-commit](https://github.com/pre-commit/pre-commit) for instructions.
+Note that `yesqa` is a standalone tool, not a flake8 plugin.
 
 Sample `.pre-commit-config.yaml`:
 
