@@ -5,8 +5,9 @@ yesqa
 =====
 
 A tool (and pre-commit hook) to automatically remove unnecessary `# noqa`
-comments. For example: a check that's no longer applicable (say you increased your
-max line length), a mistake (`# noqa` added to a line that wasn't failing),
+comments. Some examples are:
+a check that's no longer applicable (say you increased your max line length),
+a mistake (`# noqa` added to a line that wasn't failing),
 or other code in the file caused it to no longer need a `# noqa` (such as an unused import).
 
 ## Installation
