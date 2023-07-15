@@ -62,7 +62,7 @@ def _mask_noqa_comment(tokens: Tokens, i: int) -> None:
     assert match is not None
 
     def _sub(match: Match[str]) -> str:
-        return f'# {"."*(len(match.group())-2)}'
+        return f'# {"."*(len(match.group()) - 2)}'
 
     src = NOQA_RE.sub(_sub, token.src)
     tokens[i] = token._replace(src=src)
