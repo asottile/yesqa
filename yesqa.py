@@ -7,13 +7,12 @@ import re
 import subprocess
 import sys
 import tempfile
-from typing import List
-from typing import Match
-from typing import Sequence
+from collections.abc import Sequence
+from re import Match
 
 import tokenize_rt
 
-Tokens = List[tokenize_rt.Token]
+Tokens = list[tokenize_rt.Token]
 
 NOQA_FILE_RE = re.compile(r'^# flake8[:=]\s*noqa', re.I)
 _code = '[a-z]{1,3}[0-9]+'
